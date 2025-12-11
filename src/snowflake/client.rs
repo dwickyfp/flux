@@ -51,7 +51,7 @@ impl SnowflakeClient {
             .header(AUTHORIZATION, format!("Bearer {}", token))
             .header(CONTENT_TYPE, "application/json")
             .header(ACCEPT, "application/json")
-            .header("User-Agent", "flux-etl/0.1.0")
+            .header("User-Agent", "flux/0.1.0")
             .header("X-Snowflake-Authorization-Token-Type", "KEYPAIR_JWT")
             .json(&request_body)
             .send()
