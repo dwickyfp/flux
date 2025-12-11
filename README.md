@@ -75,6 +75,43 @@ graph TD
    cargo run --release
    ```
 
+### Snowflake Key-Pair Authentication Setup
+
+Flux uses JWT authentication with RSA key pairs to connect to Snowflake.
+
+#### 1. Generate a New RSA Key Pair
+```bash
+# Generate encrypted private key (AES-256)
+openssl genrsa 2048 | openssl pkcs8 -topk8 -v2 aes-256-cbc -inform PEM -out rsa_key.p8
+# Enter a passphrase when prompted
+```
+
+#### 2. Extract the Public Key
+```bash
+openssl rsa -in rsa_key.p8 -pubout -out rsa_key.pub
+# Enter passphrase when prompted
+```
+
+#### 3. Register Public Key in Snowflake
+```sql
+-- Get the public key content (without BEGIN/END lines)
+-- Then run as ACCOUNTADMIN:
+ALTER USER YOUR_USER SET RSA_PUBLIC_KEY='MIIBIjANBgkq...';
+
+-- Verify registration:
+DESC USER YOUR_USER;
+```
+
+#### 4. Configure Flux
+Update `config/default.toml`:
+```toml
+[destination.snowflake]
+account_identifier = "ORG-ACCOUNT"
+user = "YOUR_USER"
+private_key_path = "./user/rsa_key.p8"
+private_key_passphrase = "your_passphrase"
+```
+
 ## ⚙️ Configuration
 
 Flux uses a table-driven configuration approach. To add a new pipeline, simply insert a record into the management table:

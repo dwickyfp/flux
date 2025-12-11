@@ -1,0 +1,11 @@
+[destination.snowflake]
+account_identifier = "" 
+user = ""
+role = ""
+database = ""
+schema = ""
+warehouse = ""
+private_key_path = ""
+private_key_passphrase = ""
+buffer_flush_interval_ms = 1000
+buffer_batch_size = 500
