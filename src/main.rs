@@ -22,7 +22,7 @@ async fn main() -> Result<(), Box<dyn Error + Send + Sync>> {
     let database_url = env::var("MANAGEMENT_DATABASE_URL")
         .unwrap_or_else(|_| "host=localhost user=postgres password=postgres dbname=postgres".to_string());
         
-    println!("Flux Manager v0.1.0-FIXED");
+    println!("Flux Manager v0.1.0");
     println!("Connecting to management db: {}", database_url);
     let (client, connection) = tokio_postgres::connect(&database_url, NoTls).await?;
     
