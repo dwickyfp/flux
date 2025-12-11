@@ -112,6 +112,43 @@ private_key_path = "./user/rsa_key.p8"
 private_key_passphrase = "your_passphrase"
 ```
 
+### 5. Application Configuration (`config/default.toml`)
+
+You can create a `config/default.toml` file to manage your Snowflake connection settings. Here is a reference for the available options:
+
+```toml
+[destination.snowflake]
+# Your Snowflake Account Identifier (e.g. ORG-ACCOUNT)
+# Find this in Snowflake UI -> Admin -> Accounts
+account_identifier = "ORG-ACCOUNT" 
+
+# Snowflake User with Key-Pair Authentication configured
+user = "FLUX_USER"
+
+# Role with USAGE rights on Warehouse and INSERT rights on Database/Schema
+role = "DEV_ROLE"
+
+# Destination Database and Schema for CDC tables
+database = "DEVELOPMENT"
+schema = "RAW"
+
+# Warehouse to use for loading data
+warehouse = "COMPUTE_WH"
+
+# Path to your private key (PKCS8 PEM format)
+private_key_path = "./user/rsa_key.p8"
+
+# Passphrase for the private key (if encrypted)
+# Remove this line if your key is not encrypted
+private_key_passphrase = "your_passphrase"
+
+# Buffering Settings
+# How often to flush the buffer to Snowflake (milliseconds)
+buffer_flush_interval_ms = 1000
+# Maximum number of rows to buffer before flushing
+buffer_batch_size = 500
+```
+
 ## ⚙️ Configuration
 
 Flux uses a table-driven configuration approach. To add a new pipeline, simply insert a record into the management table:
