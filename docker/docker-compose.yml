@@ -1,0 +1,34 @@
+version: "3.9"
+
+networks:
+  flux:
+    name: flux
+    driver: bridge
+
+services:
+  postgres-source:
+    image: postgres:17
+    container_name: postgres_cdc
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+    ports:
+      - "5632:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    command: >
+      postgres 
+      -c wal_level=logical 
+      -c max_replication_slots=10 
+      -c max_wal_senders=10
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks: [flux]
+
+volumes:
+  postgres_data:
